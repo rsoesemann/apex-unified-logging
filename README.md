@@ -17,6 +17,11 @@ Logging framework based on Salesfore Platform Events to overcome the limitations
  
 ## Screenshots: ##
 
+<img width="861" alt="lightning_experience___salesforce" src="https://user-images.githubusercontent.com/8180281/51323033-616d0880-1a67-11e9-887c-4c51f0b0cd69.png">
+
+<img width="1166" alt="developer_console" src="https://user-images.githubusercontent.com/8180281/51323046-69c54380-1a67-11e9-9999-29d4697d4b82.png">
+
+<img width="649" alt="custom_settings___salesforce" src="https://user-images.githubusercontent.com/8180281/51323040-6762e980-1a67-11e9-886a-159905a035db.png">
 
 ## Kudos to: ##
 
