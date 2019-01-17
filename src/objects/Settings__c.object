@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>Hierarchy</customSettingsType>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>dat_LogViaEvents__c</fullName>
+        <externalId>false</externalId>
+        <label>Log via Platform Events on</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <label>Settings</label>
+    <listViews>
+        <fullName>All2</fullName>
+        <columns>SETUP_OWNER_NAME</columns>
+        <columns>SETUP_TYPE</columns>
+        <columns>dat_LogViaEvents__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <visibility>Public</visibility>
+</CustomObject>

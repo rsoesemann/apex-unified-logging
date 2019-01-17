@@ -1,0 +1,40 @@
+<aura:component implements="flexipage:availableForAllPageTypes">
+    <aura:attribute name="subscription" type="Map"/>
+    <aura:attribute name="isMuted" type="Boolean" default="false"/>
+    <aura:attribute name="logs" type="Map"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="treeData" type="List"/>
+
+    <!-- Events -->
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+    <!-- Services -->
+    <lightning:empApi aura:id="empApi"/>
+
+    <!-- Markup -->
+    <c:resultToast aura:id="toast" />
+
+    <div class="container">
+        <div class="slds-p-around_x-small slds-border_bottom slds-theme_shade">
+            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                <div>
+                    <span class="slds-badge">{!v.treeData.length}</span>
+                </div>
+                <div>
+                    <lightning:buttonIcon onclick="{!c.clear}" iconName="utility:delete"
+                                          title="Clear events" variant="border-filled"/>
+                    <lightning:buttonIcon onclick="{!c.toggleMute}" iconName="{!v.isMuted ? 'utility:volume_off' : 'utility:volume_high'}"
+                                          title="{!v.isMuted ? 'Unmute' : 'Mute'}" variant="border-filled"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-container_fluid slds-scrollable_y content">
+            <lightning:treeGrid aura:id="tree"
+                                columns="{!v.columns}"
+                                data="{!v.treeData}"
+                                keyField="txt_Context__c"
+                                hideCheckboxColumn="true" />
+        </div>
+    </div>
+</aura:component>

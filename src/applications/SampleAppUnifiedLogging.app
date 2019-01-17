@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0070D2</headerColor>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <description>Just to show how to embed the Log Monitor</description>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <label>Sample App (Unified Logging)</label>
+    <navType>Standard</navType>
+    <uiType>Lightning</uiType>
+    <utilityBar>Sample_App_Unified_Logging_UtilityBar</utilityBar>
+</CustomApplication>

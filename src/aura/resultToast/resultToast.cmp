@@ -1,0 +1,18 @@
+<aura:component >
+    <!-- Methods -->
+    <aura:method name="toastError" action="{!c.toastError}">
+        <aura:attribute name="error" type="Object" />
+    </aura:method>
+
+    <aura:method name="toastWarning" action="{!c.toastWarning}">
+        <aura:attribute name="warning" type="Object" />
+    </aura:method>
+
+    <aura:method name="toastSuccess" action="{!c.toast}">
+        <aura:attribute name="title" type="String" />
+        <aura:attribute name="message" type="String" />
+    </aura:method>
+
+    <!-- Markup -->
+    <lightning:notificationsLibrary aura:id="toast" />
+</aura:component>
