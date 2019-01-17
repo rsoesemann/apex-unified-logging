@@ -27,6 +27,6 @@ Logging framework based on Salesfore Platform Events to overcome the limitations
 
 I was standing on the shoulders of those giants when building this
 
-- [Advanced Logging with Platform Events](https://www.youtube.com/watch?v=yYeurYnasVc) by @afawcett
-- [Ein Versuch über einen Protokoll-Service](https://shoreforce.herokuapp.com/ein-versuch-uber-einen-protokoll-service/) by @szandor72
+- [Advanced Logging with Platform Events](https://www.youtube.com/watch?v=yYeurYnasVc) by https://github.com/afawcett
+- [Ein Versuch über einen Protokoll-Service](https://shoreforce.herokuapp.com/ein-versuch-uber-einen-protokoll-service/) by https://github.com/szandor72
 - [Build an Instant Notification App](https://trailhead.salesforce.com/en/content/learn/projects/workshop-platform-events) 
