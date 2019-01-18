@@ -14,6 +14,7 @@ Logging framework based on Salesfore Platform Events to overcome the limitations
  - Autodetection of Code Location 
  - Nice UI using a Lightning Utility Bar 
  - Activated using user-level custom settings
+ - Easily extendible to report exceptions and Governor Limit state
  
 ## Screenshots: ##
 
