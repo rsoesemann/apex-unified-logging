@@ -97,6 +97,7 @@ public with sharing class Log {
 
 
 	private static void populateLocation(Log__e logEvent) {
+		// Note: Idea taken from https://salesforce.stackexchange.com/questions/153835
 		List<String> stacktrace = new DmlException().getStackTraceString().split('\n');
 
 		for(String line : stacktrace) {
