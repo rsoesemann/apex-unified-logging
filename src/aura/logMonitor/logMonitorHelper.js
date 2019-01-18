@@ -2,8 +2,8 @@
     initGrid: function(cmp) {
         cmp.set("v.columns", [
             {
-                type: "text",
-                fieldName: "txt_Context__c",
+                type: "number",
+                fieldName: "context",
                 label: "Context"
             },
             {
@@ -81,23 +81,24 @@
 
 
     renderTree: function(cmp) {
-      let treeData = [];
-      let logs = cmp.get("v.logs")
+        let treeData = [];
+        let logs = cmp.get("v.logs");
+        let index = 1;
 
-      for(const context in logs) {
-          if(logs[context].length === 1) {
-              treeData.push(logs[context][0]);
-          }
-          else {
-              treeData.push({
-                  txt_Context__c : context,
-                  _children : logs[context],
-              });
-          }
-      }
-      cmp.set("v.treeData", treeData);
+        for(const context in logs) {
+            let log = logs[context][0];
+            log.context = index;
 
-      cmp.find("tree").expandAll();
+            if(logs[context].length > 1) {
+                log._children = logs[context].slice(1);
+            }
+
+            treeData.push(log);
+            index++;
+        }
+
+        cmp.set("v.treeData", treeData);
+        cmp.find("tree").expandAll();
     },
 
 
