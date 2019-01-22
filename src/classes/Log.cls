@@ -108,11 +108,11 @@ public with sharing class Log {
 
 				if(hasNamespace) {
 					logEvent.txt_Class__c = (matcher.group(1).equals(ORG_NAMESPACE)) ? matcher.group(2) : matcher.group(1) + '.' + matcher.group(2);
-                    logEvent.txt_Method__c = prettyMethod(matcher.group(3));
+					logEvent.txt_Method__c = prettyMethod(matcher.group(3));
 				}
 				else {
 					logEvent.txt_Class__c = matcher.group(1);
-                    logEvent.txt_Method__c = prettyMethod(matcher.group(2));
+					logEvent.txt_Method__c = prettyMethod(matcher.group(2));
 				}
 
 				logEvent.num_Line__c = Integer.valueOf(matcher.group(4));
@@ -124,7 +124,8 @@ public with sharing class Log {
 
 
 	private static String prettyMethod(String method) {
-		return (method.contains('init')) ? 'ctor' : method;
+		String result = (method == null) ? 'anonymous' : method;
+		return (result.contains('init')) ? 'ctor' : result;
 	}
 
 
