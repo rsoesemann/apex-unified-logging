@@ -4,17 +4,20 @@
             {
                 type: "number",
                 fieldName: "context",
-                label: "Context"
+                label: "Context",
+                initialWidth: 100
             },
             {
                 type: "text",
                 fieldName: "time",
-                label: "Time"
+                label: "Time",
+                initialWidth: 100
             },
             {
                 type: "text",
                 fieldName: "txt_Class__c",
-                label: "Class"
+                label: "Class",
+                initialWidth: 200
             },
             {
                 type: "text",
@@ -24,7 +27,8 @@
             {
                 type: "text",
                 fieldName: "txl_Message__c",
-                label: "Message"
+                label: "Message",
+                initialWidth: 200
             },
         ]);
     },
@@ -81,24 +85,24 @@
 
 
     renderTree: function(cmp) {
-        let treeData = [];
-        let logs = cmp.get("v.logs");
-        let index = 1;
+      let treeData = [];
+      let logs = cmp.get("v.logs");
+      let index = 1;
 
-        for(const context in logs) {
-            let log = logs[context][0];
+      for(const context in logs) {
+              let log = logs[context][0];
             log.context = index;
 
             if(logs[context].length > 1) {
                 log._children = logs[context].slice(1);
             }
 
-            treeData.push(log);
+              treeData.push(log);
             index++;
-        }
+          }
 
-        cmp.set("v.treeData", treeData);
-        cmp.find("tree").expandAll();
+      cmp.set("v.treeData", treeData);
+      cmp.find("tree").expandAll();
     },
 
 
