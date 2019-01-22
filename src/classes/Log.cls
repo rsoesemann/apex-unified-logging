@@ -4,6 +4,7 @@ public with sharing class Log {
 	private static final String ORG_NAMESPACE = [SELECT NamespacePrefix FROM Organization].NamespacePrefix;
 	private static final String CLASSNAME = Log.class.getName();
 	private static final Pattern STACK_LINE = Pattern.compile('^(?:Class\\.)?([^.]+)\\.?([^\\.\\:]+)?[\\.\\:]?([^\\.\\:]*): line (\\d+), column (\\d+)$');
+	private static final String THIS_CONTEXT = timestamp();
 
 
 	// PUBLIC
@@ -68,7 +69,7 @@ public with sharing class Log {
 			currentEvent.txt_User__c = UserInfo.getUserId();
 			currentEvent.txl_Message__c = message;
 			currentEvent.txt_Level__c = level.name();
-			currentEvent.txt_Context__c = (contextId == null) ? timestamp() : ''+contextId;
+			currentEvent.txt_Context__c = (contextId == null) ? THIS_CONTEXT : ''+contextId;
 
 			populateLocation(currentEvent);
 
