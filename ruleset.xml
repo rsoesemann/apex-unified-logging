@@ -1,23 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Default ruleset used by the CodeClimate Engine for Salesforce.com Apex" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
-   <description>Default ruleset</description>
-    
+    <description>Default ruleset</description>
+
+    <rule ref="category/apex/design.xml" />
+    <rule ref="category/apex/performance.xml" />
+    <rule ref="category/apex/codestyle.xml" />
+    <rule ref="category/apex/bestpractices.xml" />
+    <rule ref="category/apex/errorprone.xml" />
+
     <rule ref="category/apex/security.xml">
         <priority>1</priority>
     </rule>
-
-    <rule ref="category/apex/design.xml" />
-
-    <rule ref="category/apex/performance.xml" />
-
-    <rule ref="category/apex/codestyle.xml">
-        <exclude name="EmptyCatchBlock"/>
-    </rule>
-
-    <rule ref="category/apex/bestpractices.xml" />
 
     <rule ref="category/apex/documentation.xml">
         <exclude name="ApexDoc"/>
     </rule>
 
+    <rule name="AvoidProductionDebugLogs"
+          language="apex"
+          message="Avoid leaving System.debug() statments in code as they negativly influence performance."
+          class="net.sourceforge.pmd.lang.apex.rule.ApexXPathRule">
+        <description>
+            Avoid leaving System.debug() statments in code as they negativly influence performance.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //MethodCallExpression[@FullMethodName='System.debug'][count(*)=2]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+        <example>
+            <![CDATA[
+            // this is OK
+            System.debug(LoggingLevel.ERROR, 'Failure');
+
+            // but this is not
+            System.debug('Debug' + var);
+            ]]>
+        </example>
+    </rule>
 </ruleset>
