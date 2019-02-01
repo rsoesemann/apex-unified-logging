@@ -76,7 +76,7 @@ public with sharing class Log {
 			EventBus.publish(currentEvent);
 		}
 		else {
-			System.debug(level, message);
+			System.debug(message);
 		}
 	}
 
