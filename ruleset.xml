@@ -16,6 +16,7 @@
         <exclude name="ApexDoc"/>
     </rule>
 
+
     <rule name="AvoidProductionDebugLogs"
           language="apex"
           message="Avoid leaving System.debug() statments in code as they negativly influence performance."
