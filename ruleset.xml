@@ -12,11 +12,6 @@
         <priority>1</priority>
     </rule>
 
-    <rule ref="category/apex/documentation.xml">
-        <exclude name="ApexDoc"/>
-    </rule>
-
-
     <rule name="AvoidProductionDebugLogs"
           language="apex"
           message="Avoid leaving System.debug() statments in code as they negativly influence performance."
