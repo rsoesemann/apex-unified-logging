@@ -5,7 +5,7 @@
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/src/main/webapp/resources/img/deploy.png">
 </a>
 
-Logging framework based on Salesfore Platform Events to overcome the limitations of `System.debug` logging. There is a short [Live-Demo in this Pluralsight Course](https://app.pluralsight.com/course-player?clipId=c4f15ea0-4e76-4e04-a0f6-d6fb5fe65f69).
+Logging framework based on Salesfore Platform Events to overcome the limitations of `System.debug` logging.
 
 ## Features: ##
  - Provides unified view of logs over transaction boundaries (a.k.a. execution contexts)
