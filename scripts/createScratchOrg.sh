@@ -25,6 +25,9 @@ execute sfdx force:user:permset:assign -n Admin
 echo "Make sure Org user is english"
 sfdx force:data:record:update -s User -w "Name='User User'" -v "Languagelocalekey=en_US"
 
+echo "Run setup code"
+sfdx force:apex:execute -f scripts/setup.apex -u $SCRATCH_ORG_ALIAS
+
 echo "Running Apex Tests"
 execute sfdx force:apex:test:run -l RunLocalTests --synchronous
 

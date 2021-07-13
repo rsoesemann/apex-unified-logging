@@ -1,0 +1,1 @@
+insert new Settings__c(SetupOwnerId = UserInfo.getUserId(), dat_LogViaEvents__c = System.today());
