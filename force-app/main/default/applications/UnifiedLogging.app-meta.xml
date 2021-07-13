@@ -11,5 +11,5 @@
     <label>Unified Logging</label>
     <navType>Standard</navType>
     <uiType>Lightning</uiType>
-    <utilityBar>Unified_Logging_UtilityBar</utilityBar>
+    <utilityBar>UnifiedLoggingUtilityBar</utilityBar>
 </CustomApplication>

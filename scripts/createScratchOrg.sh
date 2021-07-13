@@ -9,11 +9,11 @@ if [ -z "$secrets.DEV_HUB_URL" ]; then
   echo "set default devhub user"
   execute sfdx force:config:set defaultdevhubusername=$DEV_HUB_ALIAS
 
-  echo "deleting old scratch org"
+  echo "Deleting old scratch org"
   sfdx force:org:delete -p -u $SCRATCH_ORG_ALIAS
 fi
 
-echo "Creating scratch ORG"
+echo "Creating scratch org"
 execute sfdx force:org:create -a $SCRATCH_ORG_ALIAS -s -f ./config/project-scratch-def.json -d 7
 
 echo "Pushing changes to scratch org"
