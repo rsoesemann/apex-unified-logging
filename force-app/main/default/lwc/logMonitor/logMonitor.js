@@ -1,61 +1,56 @@
-import { LightningElement } from "lwc";
+import { LightningElement, track } from "lwc";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { subscribe, unsubscribe, onError } from "lightning/empApi";
 import userId from "@salesforce/user/Id";
 import longTimeFormat from "@salesforce/i18n/dateTime.longTimeFormat";
 
 export default class LogMonitor extends LightningElement {
 
-    subscription = {};
+    subscription = null;
     isMuted = false;
     logs = {};
-    columns = [];
-    treeData = [];
+
+    @track logsAsTree = [];
+    @track columns = [
+        {
+            type: "number",
+            fieldName: "context",
+            label: "Context",
+            initialWidth: 100
+        },
+        {
+            type: "text",
+            fieldName: "time",
+            label: "Time",
+            initialWidth: 100
+        },
+        {
+            type: "text",
+            fieldName: "txt_Class__c",
+            label: "Class",
+            initialWidth: 200
+        },
+        {
+            type: "text",
+            fieldName: "txt_Method__c",
+            label: "Method"
+        },
+        {
+            type: "text",
+            fieldName: "txl_Message__c",
+            label: "Message",
+            initialWidth: 200
+        },
+    ];
 
 
     connectedCallback() {
-        this.initGrid();
-        this.registerErrorListener();
         this.subscribe();
     }
 
 
     disconnectedCallback() {
         this.unsubscribe();
-    }
-
-
-    initGrid() {
-        this.columns = [
-            {
-                type: "number",
-                fieldName: "context",
-                label: "Context",
-                initialWidth: 100
-            },
-            {
-                type: "text",
-                fieldName: "time",
-                label: "Time",
-                initialWidth: 100
-            },
-            {
-                type: "text",
-                fieldName: "txt_Class__c",
-                label: "Class",
-                initialWidth: 200
-            },
-            {
-                type: "text",
-                fieldName: "txt_Method__c",
-                label: "Method"
-            },
-            {
-                type: "text",
-                fieldName: "txl_Message__c",
-                label: "Message",
-                initialWidth: 200
-            },
-        ];
     }
 
 
@@ -67,23 +62,20 @@ export default class LogMonitor extends LightningElement {
         subscribe("/event/Log__e", -1, callback).then(response => {
             this.subscription = response;
         });
+
+        onError(error => {
+            this.dispatchEvent( new ShowToastEvent({
+                variant: "error",
+                title: "Received error from server:",
+                message: JSON.stringify(error),
+            }) );
+        });
     }
 
 
     unsubscribe() {
         unsubscribe(this.subscription, response => {
             this.subscription = null;
-        });
-    }
-
-
-    registerErrorListener() {
-        onError(error => {
-            this.dispatchEvent( new ShowToastEvent({
-                variant: "error",
-                title: "Received error from server:",
-                message: error,
-            }) );
         });
     }
 
@@ -110,7 +102,7 @@ export default class LogMonitor extends LightningElement {
 
     reset() {
         this.logs = {};
-        this.treeData = [];
+        this.logsAsTree = [];
     }
   
 
@@ -138,7 +130,7 @@ export default class LogMonitor extends LightningElement {
 
     renderTree() {
       let index = 1;
-      this.treeData = [];
+      this.logsAsTree = [];
 
       for(const context in this.logs) {
             let log = this.logs[context][0];
@@ -148,7 +140,7 @@ export default class LogMonitor extends LightningElement {
                 log._children = logs[context].slice(1);
             }
 
-            this.treeData.push(log);
+            this.logsAsTree.push(log);
             index++;
           }
 

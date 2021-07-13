@@ -1,4 +1,4 @@
-public with sharing class Log {
+public without sharing class Log {
 
 	private static final Boolean LOG_VIA_EVENTS = logViaEvents();
 	private static final String ORG_NAMESPACE = [SELECT NamespacePrefix FROM Organization].NamespacePrefix;
@@ -55,7 +55,7 @@ public with sharing class Log {
 			EventBus.publish(currentEvent);
 		}
 		else {
-			System.debug(message);
+			System.debug(level, message);
 		}
 	}
 
