@@ -6,7 +6,7 @@ import longTimeFormat from "@salesforce/i18n/dateTime.longTimeFormat";
 
 export default class LogMonitor extends LightningElement {
 
-    subscription = null;
+    subscription;
     isMuted = false;
     logs = {};
 
@@ -54,6 +54,12 @@ export default class LogMonitor extends LightningElement {
     }
 
 
+    clearAll() {
+        this.logs = {};
+        this.logsAsTree = [];
+    }
+
+
     subscribe() {
         const callback = function(message) {
             this.receive(message);
@@ -85,46 +91,13 @@ export default class LogMonitor extends LightningElement {
 
         if(log.txt_User__c === userId) {
             log.time = new Intl.DateTimeFormat(longTimeFormat).format(log.CreatedDate);
-            this.store(log);
+            
+            const context = log.txt_Context__c;
+            this.logs[context] = this.logs[context] || [];
+            this.logs[context].push(log);
 
             this.renderTree();
         }
-    }
-
-
-    store(log) {
-        const context = log.txt_Context__c;
-
-        this.logs[context] = this.logs[context] || [];
-        this.logs[context].push(log);
-    }
-
-
-    reset() {
-        this.logs = {};
-        this.logsAsTree = [];
-    }
-  
-
-    toggleMute() {
-        this.isMuted = !this.isMuted;
-
-        if(this.isMuted) {
-            this.unsubscribe();
-        }
-        else {
-            this.subscribe();
-        }
-    }
-
-
-    get muteIcon() {
-        return (this.isMuted) ? "utility:volume_off" : "utility:volume_high";
-    }
-
-    
-    get muteLabel() {
-        return (this.isMuted) ? "Unmute" : "Mute";
     }
 
 
@@ -147,5 +120,27 @@ export default class LogMonitor extends LightningElement {
         this.template
                 .querySelector("lightning-tree-grid")
                 .expandAll();
+    }
+  
+
+    toggleMute() {
+        this.isMuted = !this.isMuted;
+
+        if(this.isMuted) {
+            this.unsubscribe();
+        }
+        else {
+            this.subscribe();
+        }
+    }
+
+
+    get muteIcon() {
+        return (this.isMuted) ? "utility:volume_off" : "utility:volume_high";
+    }
+
+    
+    get muteLabel() {
+        return (this.isMuted) ? "Unmute" : "Mute";
     }
 }
