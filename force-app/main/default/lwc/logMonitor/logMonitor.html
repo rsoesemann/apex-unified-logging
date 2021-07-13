@@ -1,0 +1,21 @@
+<template>
+    <div class="container">
+        <div class="slds-p-around_x-small slds-border_bottom slds-theme_shade">
+            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                <div>
+                    <span class="slds-badge">{treeData.length}</span>
+                </div>
+                <div>
+                    <lightning-button-group>
+                        <lightning-button onclick={toggleMute} icon-name={muteIcon} label={muteLabel} variant="border-filled"></lightning-button>
+                        <lightning-button onclick={clear} icon-name="utility:delete" label="Clear events" variant="border-filled"></lightning-button>
+                    </lightning-button-group>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-container_fluid slds-scrollable_y content">
+            <lightning-tree-grid columns={columns} data={treeData} key-field="txt_Context__c"></lightning-tree-grid>
+        </div>
+    </div>
+</template>

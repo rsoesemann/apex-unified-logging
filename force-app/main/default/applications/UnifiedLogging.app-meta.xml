@@ -8,8 +8,8 @@
     <formFactors>Large</formFactors>
     <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
-    <label>Sample App (Unified Logging)</label>
+    <label>Unified Logging</label>
     <navType>Standard</navType>
     <uiType>Lightning</uiType>
-    <utilityBar>Sample_App_Unified_Logging_UtilityBar</utilityBar>
+    <utilityBar>Unified_Logging_UtilityBar</utilityBar>
 </CustomApplication>

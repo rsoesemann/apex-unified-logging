@@ -4,64 +4,43 @@ public with sharing class Log {
 	private static final String ORG_NAMESPACE = [SELECT NamespacePrefix FROM Organization].NamespacePrefix;
 	private static final String CLASSNAME = Log.class.getName();
 	private static final Pattern STACK_LINE = Pattern.compile('^(?:Class\\.)?([^.]+)\\.?([^\\.\\:]+)?[\\.\\:]?([^\\.\\:]*): line (\\d+), column (\\d+)$');
-	private static final String THIS_CONTEXT = timestamp();
 
 
 	// PUBLIC
 
+	public static void debug() {
+		debug('', new List<Object>());
+	}
+	
+	
 	public static void debug(String message) {
-		debug(message, new List<Object>(), null);
+		debug(message, new List<Object>());
 	}
 
 
 	public static void debug(String message, List<Object> values) {
-		debug(message, values, null);
+		emit(message, values, LoggingLevel.DEBUG);
 	}
 
 
-	public static void debug(String message, Id contextId) {
-		debug(message, new List<Object>(), contextId);
-	}
-
-
-	public static void debug(Id contextId) {
-		debug('', new List<Object>(), contextId);
-	}
-
-
-	public static void debug(String message, List<Object> values, Id contextId) {
-		emit(message, values, contextId, LoggingLevel.DEBUG);
+	public static void error() {
+		error('', new List<Object>());
 	}
 
 
 	public static void error(String message) {
-		error(message, new List<Object>(), null);
+		error(message, new List<Object>());
 	}
 
 
 	public static void error(String message, List<Object> values) {
-		error(message, values, null);
-	}
-
-
-	public static void error(String message, Id contextId) {
-		error(message, new List<Object>(), contextId);
-	}
-
-
-	public static void error(Id contextId) {
-		error('', new List<Object>(), contextId);
-	}
-
-
-	public static void error(String message, List<Object> values, Id contextId) {
-		emit(message, values, contextId, LoggingLevel.ERROR);
+		emit(message, values, LoggingLevel.ERROR);
 	}
 
 
 	// PRIVATE
 
-	private static void emit(String message, List<Object> values, Id contextId, LoggingLevel level) {
+	private static void emit(String message, List<Object> values, LoggingLevel level) {
 		message = String.format(message, cast(values));
 
 		if(LOG_VIA_EVENTS) {
@@ -69,7 +48,7 @@ public with sharing class Log {
 			currentEvent.txt_User__c = UserInfo.getUserId();
 			currentEvent.txl_Message__c = message;
 			currentEvent.txt_Level__c = level.name();
-			currentEvent.txt_Context__c = (contextId == null) ? THIS_CONTEXT : ''+contextId;
+			currentEvent.txt_Context__c = Request.getCurrent().getRequestId();
 
 			populateLocation(currentEvent);
 
@@ -89,11 +68,6 @@ public with sharing class Log {
 		}
 
 		return result;
-	}
-
-
-	public static String timestamp() {
-		return System.now().formatGmt('HH:mm:ss.SSS');
 	}
 
 

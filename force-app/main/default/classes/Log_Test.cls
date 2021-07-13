@@ -7,13 +7,12 @@ private class Log_Test {
 		// Setup
 		enableLogEvents(System.today());
 
-		Id contextId = 'a2R1T0000034dUTUAY';
 		String message = '{0}=={1}:{2}';
 		List<Object> values = new List<Object>{ 1, '2', false };
 
 
 		// Execute
-		Log.debug(message, values, contextId);
+		Log.debug(message, values);
 
 
 		// Verify
@@ -21,10 +20,10 @@ private class Log_Test {
 
 		System.assertEquals('1==2:false', log.txl_Message__c);
 		System.assertEquals(LoggingLevel.DEBUG.name(), log.txt_Level__c);
-		System.assertEquals(contextId, log.txt_Context__c);
+		System.assertEquals(Request.getCurrent().getRequestId(), log.txt_Context__c);
 		System.assertEquals(thisClassName(), log.txt_Class__c);
 		System.assertEquals('debug', log.txt_Method__c);
-		System.assertEquals(16, log.num_Line__c);
+		System.assertEquals(15, log.num_Line__c);
 	}
 
 
