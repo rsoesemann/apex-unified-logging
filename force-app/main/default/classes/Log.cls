@@ -48,7 +48,7 @@ public without sharing class Log {
 			currentEvent.txt_User__c = UserInfo.getUserId();
 			currentEvent.txl_Message__c = message;
 			currentEvent.txt_Level__c = level.name();
-			currentEvent.txt_Context__c = Request.getCurrent().getRequestId();
+			currentEvent.txt_Context__c = Request.getCurrent().getRequestId() + '_' + Request.getCurrent().getQuiddity();
 
 			populateLocation(currentEvent);
 
