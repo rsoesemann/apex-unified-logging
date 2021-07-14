@@ -18,7 +18,7 @@ Logging framework based on Salesfore Platform Events to overcome the limitations
  
 ## Screenshots: ##
 
-<img width="500" alt="lightning_experience___salesforce_und_skype_und_cprm____dev_projects_cprm__-_attributeprovider" src="https://user-images.githubusercontent.com/8180281/51395918-44efcf80-1b3e-11e9-978a-5e5ca4d29247.png">
+<img width="500" alt="lightning_experience___salesforce_und_skype_und_cprm____dev_projects_cprm__-_attributeprovider" src="https://user-images.githubusercontent.com/8180281/125614833-b5cf6a5c-7ae6-4e11-bfa0-dcd6fffcbdf5.png">
 
 <img width="500" alt="developer_console" src="https://user-images.githubusercontent.com/8180281/51323046-69c54380-1a67-11e9-9999-29d4697d4b82.png">
 
