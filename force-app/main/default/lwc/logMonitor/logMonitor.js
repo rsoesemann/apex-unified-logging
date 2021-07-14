@@ -10,10 +10,16 @@ export default class LogMonitor extends LightningElement {
     isMuted = false;
     logs = {};
 
-    @track logsAsTree = [];
-    @track columns = [
+    logsAsTree = [];
+    columns = [
         {
             type: "number",
+            fieldName: "index",
+            label: "#",
+            initialWidth: 10
+        },
+        {
+            type: "text",
             fieldName: "context",
             label: "Context",
             initialWidth: 100
@@ -84,7 +90,7 @@ export default class LogMonitor extends LightningElement {
         if(log.txt_User__c === userId) {
             const timeFormat = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
             log.time = new Intl.DateTimeFormat(locale, timeFormat).format(new Date(log.CreatedDate));
-            
+      
             const context = log.txt_Context__c;
             this.logs[context] = this.logs[context] || [];
             this.logs[context].push(log);
@@ -95,20 +101,21 @@ export default class LogMonitor extends LightningElement {
 
 
     renderTree() {
-      let index = 1;
-      this.logsAsTree = [];
+        let index = 1;
+        this.logsAsTree = [];
 
-      for(const context in this.logs) {
+        for(const context in this.logs) {
             let log = this.logs[context][0];
-            log.context = index;
+            log.index = index;
+            log.context = context.split("_")[1]; 
 
             if(this.logs[context].length > 1) {
-                log._children = logs[context].slice(1);
+                log._children = this.logs[context].slice(1);
             }
 
             this.logsAsTree.push(log);
             index++;
-          }
+        }
 
         this.template
                 .querySelector("lightning-tree-grid")
