@@ -20,7 +20,7 @@ private class Log_Test {
 
 		System.assertEquals('1==2:false', log.txl_Message__c);
 		System.assertEquals(LoggingLevel.DEBUG.name(), log.txt_Level__c);
-		System.assertEquals(Request.getCurrent().getRequestId(), log.txt_Context__c);
+		System.assertEquals(Request.getCurrent().getRequestId() + '/' + Request.getCurrent().getQuiddity(), log.txt_Context__c);
 		System.assertEquals(thisClassName(), log.txt_Class__c);
 		System.assertEquals('debug', log.txt_Method__c);
 		System.assertEquals(15, log.num_Line__c);

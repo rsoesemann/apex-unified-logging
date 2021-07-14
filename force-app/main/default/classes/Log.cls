@@ -18,6 +18,11 @@ public without sharing class Log {
 	}
 
 
+	public static void debug(List<Object> values) {
+		debug('', values);
+	}
+
+
 	public static void debug(String message, List<Object> values) {
 		emit(message, values, LoggingLevel.DEBUG);
 	}
@@ -25,6 +30,11 @@ public without sharing class Log {
 
 	public static void error() {
 		error('', new List<Object>());
+	}
+
+
+	public static void error(List<Object> values) {
+		error('', values);
 	}
 
 
@@ -48,7 +58,7 @@ public without sharing class Log {
 			currentEvent.txt_User__c = UserInfo.getUserId();
 			currentEvent.txl_Message__c = message;
 			currentEvent.txt_Level__c = level.name();
-			currentEvent.txt_Context__c = Request.getCurrent().getRequestId() + '_' + Request.getCurrent().getQuiddity();
+			currentEvent.txt_Context__c = Request.getCurrent().getRequestId() + '/' + Request.getCurrent().getQuiddity();
 
 			populateLocation(currentEvent);
 

@@ -7,6 +7,9 @@
     },
     "mobileSettings": {
         "enableS1EncryptedStoragePref2": true
+    },
+    "deploymentSettings": {
+      "doesSkipAsyncApexValidation": true
     }
   }
 }

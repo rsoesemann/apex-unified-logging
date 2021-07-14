@@ -107,7 +107,7 @@ export default class LogMonitor extends LightningElement {
         for(const context in this.logs) {
             let log = this.logs[context][0];
             log.index = index;
-            log.context = context.split("_")[1]; 
+            log.context = context.split("/")[1]; 
 
             if(this.logs[context].length > 1) {
                 log._children = this.logs[context].slice(1);
