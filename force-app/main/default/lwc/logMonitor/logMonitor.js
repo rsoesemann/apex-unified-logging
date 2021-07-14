@@ -2,7 +2,7 @@ import { LightningElement, track } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { subscribe, unsubscribe, onError } from "lightning/empApi";
 import userId from "@salesforce/user/Id";
-import longTimeFormat from "@salesforce/i18n/dateTime.longTimeFormat";
+import locale from "@salesforce/i18n/locale";
 
 export default class LogMonitor extends LightningElement {
 
@@ -60,14 +60,8 @@ export default class LogMonitor extends LightningElement {
     }
 
 
-    subscribe() {
-        const callback = function(message) {
-            this.receive(message);
-        };
-
-        subscribe("/event/Log__e", -1, callback).then(response => {
-            this.subscription = response;
-        });
+    async subscribe() {
+        this.subscription = await subscribe("/event/Log__e", -1, (message) => this.receive(message));
 
         onError(error => {
             this.dispatchEvent( new ShowToastEvent({
@@ -80,9 +74,7 @@ export default class LogMonitor extends LightningElement {
 
 
     unsubscribe() {
-        unsubscribe(this.subscription, response => {
-            this.subscription = null;
-        });
+        unsubscribe(this.subscription, response => {});
     }
 
 
@@ -90,7 +82,8 @@ export default class LogMonitor extends LightningElement {
         const log = message.data.payload;
 
         if(log.txt_User__c === userId) {
-            log.time = new Intl.DateTimeFormat(longTimeFormat).format(log.CreatedDate);
+            const timeFormat = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
+            log.time = new Intl.DateTimeFormat(locale, timeFormat).format(new Date(log.CreatedDate));
             
             const context = log.txt_Context__c;
             this.logs[context] = this.logs[context] || [];
