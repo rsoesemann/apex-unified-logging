@@ -9,7 +9,7 @@ Logging framework based on Salesfore Platform Events to overcome the limitations
 
 ## TL;DR - Show me a demo!
 
-[![](http://img.youtube.com/vi/gyEwIIcG-FA/0.jpg)](https://youtu.be/gyEwIIcG-FA "")
+[![](http://img.youtube.com/vi/72T3O4eBLIs/0.jpg)](https://youtu.be/72T3O4eBLIs "")
 
 ## Features: ##
  - Provides unified view of logs over transaction boundaries (a.k.a. execution contexts)
