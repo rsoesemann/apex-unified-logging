@@ -7,6 +7,10 @@
 
 Logging framework based on Salesfore Platform Events to overcome the limitations of `System.debug` logging.
 
+## TL;DR - Show me a demo!
+
+[![](http://img.youtube.com/vi/gyEwIIcG-FA/0.jpg)](https://youtu.be/gyEwIIcG-FA "")
+
 ## Features: ##
  - Provides unified view of logs over transaction boundaries (a.k.a. execution contexts)
  - Groups Logs of the same Batch
