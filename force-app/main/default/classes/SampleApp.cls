@@ -4,7 +4,15 @@ public with sharing class SampleApp implements Database.Batchable<Integer> {
         Log.debug('before');
         futureMethod();
         Log.debug('after');
-    }   
+    }  
+
+
+    @future
+    public static void futureMethod() {   
+        Log.debug('before');
+        System.enqueueJob(new AQueueable());
+        Log.debug('after');
+    } 
     
 
     public List<Integer> start(Database.BatchableContext ctx) { 
@@ -24,14 +32,6 @@ public with sharing class SampleApp implements Database.Batchable<Integer> {
         Log.debug('first');
         Log.error('second');
     }  
-
-
-    @future
-    public static void futureMethod() {   
-        Log.debug('before');
-        System.enqueueJob(new AQueueable());
-        Log.debug('after');
-    }
 
 
     // INNER
