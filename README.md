@@ -7,7 +7,7 @@
 
 Logging framework based on Salesfore Platform Events to overcome the limitations of `System.debug` logging.
 
-## TL;DR - Show me a demo!
+## TL;DR - Show me a video demo!
 
 [![](http://img.youtube.com/vi/72T3O4eBLIs/0.jpg)](https://youtu.be/72T3O4eBLIs "")
 
