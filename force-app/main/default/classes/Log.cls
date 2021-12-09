@@ -57,18 +57,32 @@ public without sharing class Log {
 		message = String.format(message, cast(values));
 
 		if(IS_ENABLED) {
-			log = new Log__e();
-			log.txt_User__c = UserInfo.getUserId();
-			log.txt_Context__c = Request.getCurrent().getRequestId() + '/' + Request.getCurrent().getQuiddity();
-			log.txt_Level__c = level.name();
-			
 			Map<String, Object> data = new Map<String, Object>{
-				'Message' => message
+				'Message' => message,
+				'Quiddity' =>  Request.getCurrent().getQuiddity(),
+				/* Limits */
+				'Callouts' => Limits.getCallouts(),
+				'CpuTime' => Limits.getCpuTime(),
+				'DMLRows' => Limits.getDmlRows(),
+				'DMLStatements' => Limits.getDmlStatements(),
+				'EmailInvocations' => Limits.getEmailInvocations(),
+				'FutureCalls' => Limits.getFutureCalls(),
+				'HeapSize' => Limits.getHeapSize(),
+				'Queries' => Limits.getQueries(),
+				'LocatorRows' => Limits.getQueryLocatorRows(),
+				'QueryRows' => Limits.getQueryRows(),
+				'QueueableJobs' => Limits.getQueueableJobs(),
+				'SoslQueries' => Limits.getSoslQueries()
 			};
-			storeLocation(data);
-			storeLimits(data);
-			log.txl_Data__c = JSON.serializePretty(data, true);
 
+			storeLocation(data);
+
+			log = new Log__e(
+				txt_User__c = UserInfo.getUserId(),
+				txt_Context__c = Request.getCurrent().getRequestId(),
+				txt_Level__c = level.name(),
+				txl_Data__c = JSON.serializePretty(data, true)
+			);
 			EventBus.publish(log);
 		}
 		else {
@@ -127,21 +141,6 @@ public without sharing class Log {
 
 	private static Boolean hasNamespace(Matcher matcher) {
 		return (String.isNotBlank(matcher.group(3)));
-	}
-
-	private static void storeLimits(Map<String, Object> data) {
-		data.put('Callouts', Limits.getCallouts());
-		data.put('CpuTime', Limits.getCpuTime());
-		data.put('DMLRows', Limits.getDmlRows());
-		data.put('DMLStatements', Limits.getDmlStatements());
-		data.put('EmailInvocations', Limits.getEmailInvocations());
-		data.put('FutureCalls', Limits.getFutureCalls());
-		data.put('HeapSize', Limits.getHeapSize());
-		data.put('Queries', Limits.getQueries());
-		data.put('LocatorRows', Limits.getQueryLocatorRows());
-		data.put('QueryRows', Limits.getQueryRows());
-		data.put('QueueableJobs', Limits.getQueueableJobs());
-		data.put('SoslQueries', Limits.getSoslQueries());
 	}
 
 

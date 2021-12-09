@@ -17,10 +17,10 @@ private class Log_Test {
 
 		System.assertEquals(UserInfo.getUserId(), log.txt_User__c);
 		System.assertEquals(LoggingLevel.DEBUG.name(), log.txt_Level__c);
-		System.assertEquals(Request.getCurrent().getRequestId() + '/' + Request.getCurrent().getQuiddity(), log.txt_Context__c);
+		System.assertEquals(Request.getCurrent().getRequestId(), log.txt_Context__c);
 
 		Map<String, Object> data = data(log);
-
+		System.assertEquals(Request.getCurrent().getQuiddity(), (String) data.get('Quiddity'));
 		System.assertEquals('1==2:false', (String) data.get('Message'));
 		System.assertEquals(thisClassName(), (String) data.get('Class'));
 		System.assertEquals('debug', (String) data.get('Method'));
