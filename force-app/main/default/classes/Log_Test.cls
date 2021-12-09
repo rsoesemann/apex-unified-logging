@@ -20,7 +20,7 @@ private class Log_Test {
 		System.assertEquals(Request.getCurrent().getRequestId(), log.txt_Context__c);
 
 		Map<String, Object> data = data(log);
-		System.assertEquals(Request.getCurrent().getQuiddity(), (String) data.get('Quiddity'));
+		System.assertEquals(Request.getCurrent().getQuiddity().name(), (String) data.get('Quiddity'));
 		System.assertEquals('1==2:false', (String) data.get('Message'));
 		System.assertEquals(thisClassName(), (String) data.get('Class'));
 		System.assertEquals('debug', (String) data.get('Method'));

@@ -9,32 +9,30 @@ export default class LogMonitor extends LightningElement {
     subscription;
     isMuted = false;
     logs = {};
+    previousLog;
 
     logsAsTree = [];
     columns = [
         {
             type: "number",
             fieldName: "index",
-            label: "#",
-            initialWidth: 10
+            label: "#"
         },
         {
             type: "text",
-            fieldName: "context",
-            label: "Context",
+            fieldName: "txl_Data__c.Quiddity",
+            label: "Quiddity",
             initialWidth: 100
         },
         {
             type: "text",
-            fieldName: "time",
-            label: "Time",
-            initialWidth: 100
+            fieldName: "elapsed",
+            label: "Elapsed"
         },
         {
             type: "text",
-            fieldName: "Class",
-            label: "Class",
-            initialWidth: 200
+            fieldName: "txl_Data__c.Class",
+            label: "Class"
         },
         {
             type: "text",
@@ -43,15 +41,13 @@ export default class LogMonitor extends LightningElement {
         },
         {
             type: "text",
-            fieldName: "txl_Data__c",
-            label: "Data",
-            initialWidth: 200
+            fieldName: "txl_Data__c.Line",
+            label: "Line"
         },
         {
             type: "number",
             fieldName: "DMLRows",
-            label: "DMLRows",
-            initialWidth: 10
+            label: "DMLRows"
         },
     ];
 
@@ -94,8 +90,8 @@ export default class LogMonitor extends LightningElement {
         const log = message.data.payload;
 
         if(log.txt_User__c === userId) {
-            const timeFormat = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
-            log.time = new Intl.DateTimeFormat(locale, timeFormat).format(new Date(log.CreatedDate));
+            var elapsed = new Date(log.CreatedDate).getTime() - new Date(previousLog.CreatedDate).getTime();
+            log.elapsed = new Intl.DateTimeFormat(locale, timeFormat).format(elapsed);
       
             const context = log.txt_Context__c;
             this.logs[context] = this.logs[context] || [];
@@ -103,6 +99,8 @@ export default class LogMonitor extends LightningElement {
 
             this.renderTree();
         }
+
+        this.previousLog = log;
     }
 
 
@@ -113,7 +111,6 @@ export default class LogMonitor extends LightningElement {
         for(const context in this.logs) {
             let log = this.logs[context][0];
             log.index = index;
-            log.context = context.split("/")[1]; 
 
             if(this.logs[context].length > 1) {
                 log._children = this.logs[context].slice(1);
