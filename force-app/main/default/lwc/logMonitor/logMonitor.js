@@ -38,7 +38,7 @@ export default class LogMonitor extends LightningElement {
         },
         {
             type: "text",
-            fieldName: "Method",
+            fieldName: "txl_Data__c.Method",
             label: "Method"
         },
         {

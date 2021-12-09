@@ -7,32 +7,25 @@ private class Log_Test {
 		// Setup
 		enableLogEvents(System.today());
 
-		String message = '{0}=={1}:{2}';
-		List<Object> values = new List<Object>{ 1, '2', false };
-		insert new Account(Name = 'Acme');
-
 
 		// Execute
-		Log.debug(message, values);
+		Log.debug('{0}=={1}:{2}', new List<Object>{ 1, '2', false });
 
 
 		// Verify
 		Log__e log = Log.currentEvent();
+
 		System.assertEquals(UserInfo.getUserId(), log.txt_User__c);
 		System.assertEquals(LoggingLevel.DEBUG.name(), log.txt_Level__c);
 		System.assertEquals(Request.getCurrent().getRequestId() + '/' + Request.getCurrent().getQuiddity(), log.txt_Context__c);
 
-		System.assertEquals('1==2:false', log.txl_Message__c);
-		System.assertEquals(thisClassName(), log.txt_Class__c);
-		System.assertEquals('debug', log.txt_Method__c);
-		System.assertEquals(16, log.num_Line__c);
-
 		Map<String, Object> data = data(log);
+
 		System.assertEquals('1==2:false', (String) data.get('Message'));
 		System.assertEquals(thisClassName(), (String) data.get('Class'));
 		System.assertEquals('debug', (String) data.get('Method'));
-		System.assertEquals(16, (Integer) data.get('Line'));
-		System.assertEquals(2, (Integer) data.get('DMLRows')); // 1x Settings__c + 1x Log__e
+		System.assertEquals(12, (Integer) data.get('Line'));
+		System.assertEquals(1, (Integer) data.get('DMLRows')); // 1x Settings__c
 	}
 
 

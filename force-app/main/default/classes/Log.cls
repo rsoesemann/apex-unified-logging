@@ -62,9 +62,9 @@ public without sharing class Log {
 			log.txt_Context__c = Request.getCurrent().getRequestId() + '/' + Request.getCurrent().getQuiddity();
 			log.txt_Level__c = level.name();
 			
-			Map<String, Object> data = new Map<String, Object>();
-			log.txl_Message__c = message;
-			data.put('Message', message);
+			Map<String, Object> data = new Map<String, Object>{
+				'Message' => message
+			};
 			storeLocation(data);
 			storeLimits(data);
 			log.txl_Data__c = JSON.serializePretty(data, true);
@@ -95,29 +95,38 @@ public without sharing class Log {
 			Matcher matcher = STACK_LINE.matcher(line);
 
 			if(matcher.find() && !line.startsWith('Class.' + CLASSNAME + '.')) {
-				Boolean hasNamespace = String.isNotBlank(matcher.group(3));
-
-				if(hasNamespace) {
-					log.txt_Class__c = (matcher.group(1).equals(ORG_NAMESPACE)) ? matcher.group(2) : matcher.group(1) + '.' + matcher.group(2);
-					log.txt_Method__c = prettyMethod(matcher.group(3));
-
-					data.put('Class', (matcher.group(1).equals(ORG_NAMESPACE)) ? matcher.group(2) : matcher.group(1) + '.' + matcher.group(2));
-					data.put('Method', prettyMethod(matcher.group(3)));
-				}
-				else {
-					log.txt_Class__c = matcher.group(1);
-					log.txt_Method__c = prettyMethod(matcher.group(2));
-
-					data.put('Class', matcher.group(1));
-					data.put('Method', prettyMethod(matcher.group(2)));
-				}
-
-				log.num_Line__c = Integer.valueOf(matcher.group(4));
+				data.put('Class', className(matcher));
+				data.put('Method', methodName(matcher));
 				data.put('Line', Integer.valueOf(matcher.group(4)));
 
 				return;
 			}
 		}
+	}
+
+	private static String className(Matcher matcher) {
+		String result = null;
+
+		if((hasNamespace(matcher)) ) {
+			result = (matcher.group(1).equals(ORG_NAMESPACE)) ? matcher.group(2) 
+															  : matcher.group(1) + '.' + matcher.group(2);
+		}
+		else {
+			result = matcher.group(1);
+		}
+
+		return result;
+	}
+
+	private static String methodName(Matcher matcher) {
+		return (hasNamespace(matcher)) 
+						? prettyMethod(matcher.group(3)) 
+						: prettyMethod(matcher.group(2));
+	}
+
+
+	private static Boolean hasNamespace(Matcher matcher) {
+		return (String.isNotBlank(matcher.group(3)));
 	}
 
 	private static void storeLimits(Map<String, Object> data) {
