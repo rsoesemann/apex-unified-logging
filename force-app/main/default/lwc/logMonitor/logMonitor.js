@@ -9,7 +9,7 @@ export default class LogMonitor extends LightningElement {
     subscription;
     isMuted = false;
     logs = {};
-    previousLog;
+    lastTimestamp;
 
     logsAsTree = [];
     columns = [
@@ -90,8 +90,10 @@ export default class LogMonitor extends LightningElement {
         const log = message.data.payload;
 
         if(log.txt_User__c === userId) {
-            var elapsed = new Date(log.CreatedDate).getTime() - new Date(previousLog.CreatedDate).getTime();
-            log.elapsed = new Intl.DateTimeFormat(locale, timeFormat).format(elapsed);
+            var currentTimestamp = new Date(log.CreatedDate).getTime();
+            this.lastTimestamp = this.lastTimestamp || currentTimestamp;
+            log.elapsed = new Intl.DateTimeFormat(locale, timeFormat).format(currentTimestamp - lastTimestamp);
+            this.lastTimestamp = currentTimestamp;
       
             const context = log.txt_Context__c;
             this.logs[context] = this.logs[context] || [];
@@ -99,8 +101,6 @@ export default class LogMonitor extends LightningElement {
 
             this.renderTree();
         }
-
-        this.previousLog = log;
     }
 
 
