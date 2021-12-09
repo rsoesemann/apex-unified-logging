@@ -91,8 +91,9 @@ export default class LogMonitor extends LightningElement {
 
         if(log.txt_User__c === userId) {
             var currentTimestamp = new Date(log.CreatedDate).getTime();
-            this.lastTimestamp = this.lastTimestamp || currentTimestamp;
-            log.elapsed = new Intl.DateTimeFormat(locale, timeFormat).format(currentTimestamp - lastTimestamp);
+            var lastTimestamp = this.lastTimestamp || currentTimestamp;
+            
+            log.elapsed = currentTimestamp - lastTimestamp;
             this.lastTimestamp = currentTimestamp;
       
             const context = log.txt_Context__c;
