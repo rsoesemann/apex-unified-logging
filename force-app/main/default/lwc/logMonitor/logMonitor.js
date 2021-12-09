@@ -32,20 +32,26 @@ export default class LogMonitor extends LightningElement {
         },
         {
             type: "text",
-            fieldName: "txt_Class__c",
+            fieldName: "Class",
             label: "Class",
             initialWidth: 200
         },
         {
             type: "text",
-            fieldName: "txt_Method__c",
+            fieldName: "Method",
             label: "Method"
         },
         {
             type: "text",
-            fieldName: "txl_Message__c",
-            label: "Message",
+            fieldName: "txl_Data__c",
+            label: "Data",
             initialWidth: 200
+        },
+        {
+            type: "number",
+            fieldName: "DMLRows",
+            label: "DMLRows",
+            initialWidth: 10
         },
     ];
 

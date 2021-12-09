@@ -1,9 +1,11 @@
 public without sharing class Log {
 
-	private static final Boolean LOG_VIA_EVENTS = logViaEvents();
+	private static final Boolean IS_ENABLED = isEnabled();
 	private static final String ORG_NAMESPACE = [SELECT NamespacePrefix FROM Organization].NamespacePrefix;
 	private static final String CLASSNAME = Log.class.getName();
 	private static final Pattern STACK_LINE = Pattern.compile('^(?:Class\\.)?([^.]+)\\.?([^\\.\\:]+)?[\\.\\:]?([^\\.\\:]*): line (\\d+), column (\\d+)$');
+
+	private static Log__e log = null;
 
 
 	// PUBLIC
@@ -50,25 +52,29 @@ public without sharing class Log {
 
 	// PRIVATE
 
+	@SuppressWarnings('PMD.AvoidDebugStatements')
 	private static void emit(String message, List<Object> values, LoggingLevel level) {
 		message = String.format(message, cast(values));
 
-		if(LOG_VIA_EVENTS) {
-			currentEvent = new Log__e();
-			currentEvent.txt_User__c = UserInfo.getUserId();
-			currentEvent.txl_Message__c = message;
-			currentEvent.txt_Level__c = level.name();
-			currentEvent.txt_Context__c = Request.getCurrent().getRequestId() + '/' + Request.getCurrent().getQuiddity();
+		if(IS_ENABLED) {
+			log = new Log__e();
+			log.txt_User__c = UserInfo.getUserId();
+			log.txt_Context__c = Request.getCurrent().getRequestId() + '/' + Request.getCurrent().getQuiddity();
+			log.txt_Level__c = level.name();
+			
+			Map<String, Object> data = new Map<String, Object>();
+			log.txl_Message__c = message;
+			data.put('Message', message);
+			storeLocation(data);
+			storeLimits(data);
+			log.txl_Data__c = JSON.serializePretty(data, true);
 
-			populateLocation(currentEvent);
-
-			EventBus.publish(currentEvent);
+			EventBus.publish(log);
 		}
 		else {
 			System.debug(level, message);
 		}
 	}
-
 
 	private static List<String> cast(List<Object> values) {
 		List<String> result = new List<String>();
@@ -81,7 +87,7 @@ public without sharing class Log {
 	}
 
 
-	private static void populateLocation(Log__e logEvent) {
+	private static void storeLocation(Map<String, Object> data) {
 		// Note: Idea taken from https://salesforce.stackexchange.com/questions/153835
 		List<String> stacktrace = new DmlException().getStackTraceString().split('\n');
 
@@ -92,19 +98,41 @@ public without sharing class Log {
 				Boolean hasNamespace = String.isNotBlank(matcher.group(3));
 
 				if(hasNamespace) {
-					logEvent.txt_Class__c = (matcher.group(1).equals(ORG_NAMESPACE)) ? matcher.group(2) : matcher.group(1) + '.' + matcher.group(2);
-					logEvent.txt_Method__c = prettyMethod(matcher.group(3));
+					log.txt_Class__c = (matcher.group(1).equals(ORG_NAMESPACE)) ? matcher.group(2) : matcher.group(1) + '.' + matcher.group(2);
+					log.txt_Method__c = prettyMethod(matcher.group(3));
+
+					data.put('Class', (matcher.group(1).equals(ORG_NAMESPACE)) ? matcher.group(2) : matcher.group(1) + '.' + matcher.group(2));
+					data.put('Method', prettyMethod(matcher.group(3)));
 				}
 				else {
-					logEvent.txt_Class__c = matcher.group(1);
-					logEvent.txt_Method__c = prettyMethod(matcher.group(2));
+					log.txt_Class__c = matcher.group(1);
+					log.txt_Method__c = prettyMethod(matcher.group(2));
+
+					data.put('Class', matcher.group(1));
+					data.put('Method', prettyMethod(matcher.group(2)));
 				}
 
-				logEvent.num_Line__c = Integer.valueOf(matcher.group(4));
+				log.num_Line__c = Integer.valueOf(matcher.group(4));
+				data.put('Line', Integer.valueOf(matcher.group(4)));
 
 				return;
 			}
 		}
+	}
+
+	private static void storeLimits(Map<String, Object> data) {
+		data.put('Callouts', Limits.getCallouts());
+		data.put('CpuTime', Limits.getCpuTime());
+		data.put('DMLRows', Limits.getDmlRows());
+		data.put('DMLStatements', Limits.getDmlStatements());
+		data.put('EmailInvocations', Limits.getEmailInvocations());
+		data.put('FutureCalls', Limits.getFutureCalls());
+		data.put('HeapSize', Limits.getHeapSize());
+		data.put('Queries', Limits.getQueries());
+		data.put('LocatorRows', Limits.getQueryLocatorRows());
+		data.put('QueryRows', Limits.getQueryRows());
+		data.put('QueueableJobs', Limits.getQueueableJobs());
+		data.put('SoslQueries', Limits.getSoslQueries());
 	}
 
 
@@ -114,7 +142,7 @@ public without sharing class Log {
 	}
 
 
-	private static Boolean logViaEvents() {
+	private static Boolean isEnabled() {
 		Settings__c settings = Settings__c.getValues(UserInfo.getUserId());
 		return (settings == null) ? false : (System.today() == settings.dat_LogViaEvents__c);
 	}
@@ -122,5 +150,7 @@ public without sharing class Log {
 
 	// Note: Required to allow testing
 	@TestVisible
-	private static Log__e currentEvent = null;
+	private static Log__e currentEvent() {
+		return log;
+	}
 }
