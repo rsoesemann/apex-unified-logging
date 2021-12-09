@@ -2,14 +2,13 @@ import { LightningElement, track } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { subscribe, unsubscribe, onError } from "lightning/empApi";
 import userId from "@salesforce/user/Id";
-import locale from "@salesforce/i18n/locale";
 
 export default class LogMonitor extends LightningElement {
 
     subscription;
     isMuted = false;
     logs = {};
-    lastTimestamp;
+    lastTimestamp = {};
 
     logsAsTree = [];
     columns = [
@@ -90,13 +89,13 @@ export default class LogMonitor extends LightningElement {
         const log = message.data.payload;
 
         if(log.txt_User__c === userId) {
-            var currentTimestamp = new Date(log.CreatedDate).getTime();
-            var lastTimestamp = this.lastTimestamp || currentTimestamp;
-            
-            log.elapsed = currentTimestamp - lastTimestamp;
-            this.lastTimestamp = currentTimestamp;
-      
             const context = log.txt_Context__c;
+
+            var currentTimestamp = new Date(log.CreatedDate).getTime();
+            var lastTimestamp = this.lastTimestamp[context] || currentTimestamp;
+            log.elapsed = currentTimestamp - lastTimestamp;
+            this.lastTimestamp[context] = lastTimestamp;
+      
             this.logs[context] = this.logs[context] || [];
             this.logs[context].push(log);
 
